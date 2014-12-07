@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bio'
-require 'which'
+require 'fixwhich'
 require 'hit'
 require 'crb-blast'
 
@@ -48,9 +48,9 @@ class CRB_Blast
     # check if the query is a nucleotide sequence
     query_file = Bio::FastaFormat.open(@query)
     query_file.each do |entry|
-      raise "Query sequence looks like it's not nucleotide" if !entry.isNucl?  
+      raise "Query sequence looks like it's not nucleotide" if !entry.isNucl?
     end
-    
+
     # check if the target is a nucl or prot seq
     target_file = Bio::FastaFormat.open(@target)
     count_p=0
@@ -100,7 +100,7 @@ class CRB_Blast
         cmd2 << "#{@tblastn_path} "
       else
         cmd1 << "#{@blastn_path} "
-        cmd2 << "#{@blastn_path} "       
+        cmd2 << "#{@blastn_path} "
       end
       cmd1 << " -query #{@query} -db #{@target_name} "
       cmd1 << " -out #{@output1} -evalue #{evalue} -outfmt 6 "
@@ -110,7 +110,7 @@ class CRB_Blast
       cmd2 << " -query #{@target} -db #{@query_name} "
       cmd2 << " -out #{@output2} -evalue #{evalue} -outfmt 6 "
       cmd2 << " -max_target_seqs 50 "
-      cmd2 << " -num_threads #{threads}" 
+      cmd2 << " -num_threads #{threads}"
 
       if !File.exists?("#{@output1}")
         `#{cmd1}`
@@ -216,7 +216,7 @@ class CRB_Blast
     end
     hits = 0
     @missed.each_pair do |id, list|
-      
+
       list.each do |hit|
         l = hit.alnlen.to_i
         e = hit.evalue
